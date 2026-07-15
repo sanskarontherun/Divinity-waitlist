@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Divinity — Given Voice From Above</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%231c1611'/%3E%3Cpath d='M50 20c8 14 16 20 16 34a16 16 0 1 1-32 0c0-14 8-20 16-34z' fill='%23c9963c'/%3E%3Cpath d='M50 42c4 7 8 10 8 17a8 8 0 1 1-16 0c0-7 4-10 8-17z' fill='%231c1611'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1c1611;
+    --surface:#241d16;
+    --surface-2:#2e251b;
+    --line:#4a3c2a;
+    --text:#ece4d3;
+    --muted:#a08f74;
+    --amber:#c9963c;
+    --amber-bright:#f0c374;
+    --amber-dim:#8a6526;
+    --teal:#b5563a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'IBM Plex Mono',monospace;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--amber-dim);}
+
+  /* ambient glow behind hero */
+  body::before{
+    content:'';
+    position:absolute;
+    top:-10%;
+    left:50%;
+    transform:translateX(-50%);
+    width:600px;
+    height:600px;
+    background:radial-gradient(circle, rgba(201,150,60,0.16) 0%, rgba(201,150,60,0) 70%);
+    pointer-events:none;
+    z-index:0;
+  }
+
+  header{
+    padding:28px 32px 0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    z-index:1;
+  }
+  .brand-row{display:flex;align-items:center;gap:12px;}
+  .brand{
+    font-family:'Fraunces',serif;
+    font-size:22px;
+    font-weight:600;
+  }
+  .brand .dot{color:var(--amber);}
+
+  main{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    max-width:640px;
+    width:100%;
+    margin:0 auto;
+    padding:56px 24px 40px;
+    position:relative;
+    z-index:1;
+  }
+
+  /* Signature element: a single lit wick, the only flame on the page,
+     with faint embers drifting up from it — the page's one flourish. */
+  .wick{
+    position:relative;
+    width:100%;
+    height:120px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    margin-bottom:8px;
+  }
+  .flame{
+    width:30px;
+    height:52px;
+    background:linear-gradient(180deg, var(--amber-bright) 0%, var(--amber) 55%, var(--teal) 100%);
+    border-radius:50% 50% 50% 50% / 65% 65% 35% 35%;
+    filter:drop-shadow(0 0 18px rgba(201,150,60,0.55));
+    animation:flicker 3.2s ease-in-out infinite;
+    transform-origin:bottom center;
+  }
+  @keyframes flicker{
+    0%,100%{transform:scaleY(1) scaleX(1) rotate(0deg);}
+    20%{transform:scaleY(1.08) scaleX(0.95) rotate(-1.5deg);}
+    45%{transform:scaleY(0.94) scaleX(1.04) rotate(1deg);}
+    70%{transform:scaleY(1.05) scaleX(0.97) rotate(-0.5deg);}
+  }
+  .ember{
+    position:absolute;
+    bottom:60px;
+    width:3px;
+    height:3px;
+    border-radius:50%;
+    background:var(--amber);
+    opacity:0;
+    animation:rise 4s ease-in infinite;
+  }
+  .ember:nth-child(2){left:calc(50% - 10px);animation-delay:.3s;}
+  .ember:nth-child(3){left:calc(50% + 6px);animation-delay:1.6s;}
+  .ember:nth-child(4){left:calc(50% - 3px);animation-delay:2.8s;}
+  @keyframes rise{
+    0%{opacity:0;transform:translateY(0);}
+    15%{opacity:.7;}
+    100%{opacity:0;transform:translateY(-70px);}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .flame,.ember{animation:none;}
+  }
+
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(30px,6vw,44px);
+    line-height:1.15;
+    text-align:center;
+    margin:0 0 14px;
+  }
+  h1 em{
+    font-style:italic;
+    color:var(--amber);
+  }
+  .sub{
+    font-family:'Fraunces',serif;
+    font-size:17px;
+    line-height:1.6;
+    color:var(--muted);
+    text-align:center;
+    max-width:480px;
+    margin:0 0 40px;
+  }
+
+  form{
+    width:100%;
+    max-width:420px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .field-row{
+    display:flex;
+    gap:10px;
+  }
+  input[type=email]{
+    flex:1;
+    min-width:0;
+    background:var(--surface-2);
+    border:1px solid var(--line);
+    color:var(--text);
+    padding:14px 16px;
+    border-radius:4px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:14px;
+  }
+  input[type=email]:focus{
+    outline:none;
+    border-color:var(--amber-dim);
+    box-shadow:0 0 0 3px rgba(201,150,60,0.15);
+  }
+  input[type=email]::placeholder{color:var(--muted);}
+  button[type=submit]{
+    background:var(--amber);
+    color:#1a1a1a;
+    border:none;
+    padding:14px 22px;
+    border-radius:4px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    font-weight:500;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+    cursor:pointer;
+    transition:background .15s ease, transform .1s ease;
+    white-space:nowrap;
+  }
+  button[type=submit]:hover{background:var(--amber-bright);}
+  button[type=submit]:active{transform:scale(0.97);}
+  button[type=submit]:disabled{opacity:.6;cursor:default;}
+  @media (max-width:480px){
+    .field-row{flex-direction:column;}
+  }
+
+  .form-note{
+    font-size:11px;
+    color:var(--muted);
+    text-align:center;
+  }
+  .form-status{
+    font-size:13px;
+    text-align:center;
+    min-height:18px;
+  }
+  .form-status.ok{color:var(--amber);}
+  .form-status.err{color:var(--teal);}
+
+  /* feature list — three things the product actually does, not filler */
+  .features{
+    margin-top:56px;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    gap:0;
+    border-top:1px solid var(--line);
+  }
+  .feature{
+    display:flex;
+    gap:16px;
+    padding:20px 4px;
+    border-bottom:1px solid var(--line);
+  }
+  .feature .mark{
+    flex-shrink:0;
+    width:16px;
+    height:16px;
+    margin-top:3px;
+    background:var(--amber);
+    -webkit-mask:radial-gradient(circle, #000 40%, transparent 41%) center/6px 6px no-repeat,
+                 conic-gradient(#000 0 0) content-box;
+    border-radius:2px;
+    opacity:.85;
+    transform:rotate(45deg);
+  }
+  .feature-text .t{font-size:14.5px;margin-bottom:4px;color:var(--text);font-family:'Fraunces',serif;}
+  .feature-text .d{font-size:12.5px;line-height:1.55;color:var(--muted);}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+
+<header>
+  <div class="brand-row">
+    <svg viewBox="0 0 512 512" width="24" height="24" aria-hidden="true">
+      <defs>
+        <linearGradient id="flameGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#f0c374"/>
+          <stop offset="55%" stop-color="#c9963c"/>
+          <stop offset="100%" stop-color="#8a6526"/>
+        </linearGradient>
+      </defs>
+      <path d="M256 90 C 292 138, 328 170, 328 220 C 328 262, 296 292, 256 292 C 216 292, 184 262, 184 220 C 184 170, 220 138, 256 90 Z" fill="url(#flameGrad)"/>
+      <path d="M256 152 C 274 174, 292 190, 292 216 C 292 238, 276 252, 256 252 C 236 252, 220 238, 220 216 C 220 190, 238 174, 256 152 Z" fill="#1c1611" opacity="0.55"/>
+    </svg>
+    <div class="brand">Divinity<span class="dot">.</span></div>
+  </div>
+</header>
+
+<main>
+  <div class="wick">
+    <div class="ember"></div><div class="ember"></div><div class="ember"></div>
+    <div class="flame"></div>
+  </div>
+
+  <h1>Given voice <em>from above</em>.</h1>
+  <p class="sub">Divinity turns any PDF into an audiobook, right in your browser.</p>
+
+  <form id="waitlistForm">
+    <div class="field-row">
+      <input type="email" name="email" id="emailInput" placeholder="you@email.com" required autocomplete="email">
+      <button type="submit" id="submitBtn">Join the waitlist</button>
+    </div>
+    <div class="form-status" id="formStatus"></div>
+  </form>
+
+  <div class="features">
+    <div class="feature">
+      <div class="mark"></div>
+      <div class="feature-text">
+        <div class="t">Picks up exactly where you left off</div>
+        <div class="d">Every book you open is saved locally with your progress, so closing the tab never costs you your place.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="mark"></div>
+      <div class="feature-text">
+        <div class="t">Tap any word to understand it</div>
+        <div class="d">Bookmark a line with a note, or tap a word mid-sentence for a quick definition and translation.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="mark"></div>
+      <div class="feature-text">
+        <div class="t">Wrapped in a quiet ambient world</div>
+        <div class="d">Soft background sound — a crackling hearth, gentle rain — plays low under the narration to make listening feel like a place, not just a feature.</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const SUPABASE_URL='https://nxfvronsxkqetfkrpvbz.supabase.co';
+const SUPABASE_KEY='REPLACE_WITH_YOUR_NEW_PUBLISHABLE_KEY';
+const supabase=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const form=document.getElementById('waitlistForm');
+const submitBtn=document.getElementById('submitBtn');
+const status=document.getElementById('formStatus');
+const emailInput=document.getElementById('emailInput');
+form.addEventListener('submit',async(e)=>{e.preventDefault();status.className='form-status';status.textContent='';submitBtn.disabled=true;submitBtn.textContent='Joining…';const {error}=await supabase.from('waitlist').insert([{email:emailInput.value}]);if(error){status.className='form-status err';status.textContent=error.message;}else{status.className='form-status ok';status.textContent="You're on the waitlist.";form.reset();}submitBtn.disabled=false;submitBtn.textContent='Join the waitlist';});
+</script>
+</body>
+</html>
